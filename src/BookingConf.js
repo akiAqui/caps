@@ -4,17 +4,17 @@ import ReservationContext from "./ReservationContext";
 
 
 const BookingConf = () => {
-    const { reservation } = useContext(ReservationContext);
+    const { reservation ,setReservation} = useContext(ReservationContext);
     const navigate1 =  useNavigate();
     const navigate2 =  useNavigate();
 
     const submitHandlerNext = (e) =>{
+        setReservation({...reservation, isConfirmed:true})
         navigate1('/done');
     }
     const submitHandlerPrev = (e) =>{
         navigate2('/reserve')
     }
-
 
     return (
         <>

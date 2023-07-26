@@ -16,12 +16,11 @@ const ConfirmBooking = (props) => {
         <div className='confirm-booking'>
             <div className='header'>
                 <div className="title">
-                    <h1>reservation has been made.</h1>
+                    <h2>reservation has been made.</h2>
                 </div>
             </div>
             <div className="code">
                 <QRCode value={code} className="qr" />
-                <div className='rid'>ID: {code}</div>
             </div>
             <div className='card'>
                 <div className="row">

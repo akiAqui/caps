@@ -1,8 +1,3 @@
-* {
-  margin: 0px;
-  padding: 0px;
-}
-
 $primary_green: #495e57;
 $primary_yellow: #f4ce14;
 $primary_salmon: #ee9972;
@@ -14,6 +9,10 @@ $min-width: 375;
 $mid-width: 600;
 $max-width: 1000;
 
+* {
+  margin: 0px;
+  padding: 0px;
+}
 @mixin displayTitle {
   font-family: "Markazi Text", serif;
   font-size: 40px;
@@ -37,10 +36,6 @@ $max-width: 1000;
   font-family: "Karla", sans-serif;
   font-size: 18px;
 }
-@mixin navFont {
-  font-family: "Karla", sans-serif;
-  font-size: 16px;
-}
 @mixin price {
   font-family: "Karla", sans-serif;
   font-size: 16px;
@@ -62,7 +57,6 @@ $max-width: 1000;
 @mixin sectionHeader {
   padding: 0px 0px 0px 10px;
 }
-
 @mixin cardStyle($borderColor, $cardType) {
   min-width: 220px;
   max-width: 300px;
@@ -74,6 +68,86 @@ $max-width: 1000;
     border-radius: 20px 20px 20px 0;
   } @else if $cardType == "special" {
     border-radius: 10px 10px 10px 10px;
+  }
+}
+
+@mixin responsive($device) {
+  @if $device == "mobile" {
+    @media (max-width: 620px) {
+      & {
+        @content;
+      }
+    }
+  } @else if $device == "tablet" {
+    @media (min-width: 621px) and (max-width: 960px) {
+      & {
+        @content;
+      }
+    }
+  } @else if $device == "desktop" {
+    @media (min-width: 961px) {
+      & {
+        @content;
+      }
+    }
+  }
+}
+@mixin navMix {
+  font-family: "Karla", sans-serif;
+  @media screen and (max-width: 321px) {
+    font-size: 8px;
+    gap: 14px;
+    height: 50px;
+  }
+  @media screen and (min-width: 322px) and (max-width: 361px) {
+    font-size: 14px;
+    gap: 20px;
+    height: 55px;
+  }
+  @media screen and (min-width: 362px) and (max-width: 400px) {
+    font-size: 16px;
+    gap: 10px;
+    height: 55px;
+  }
+  @media screen and (min-width: 401px) and (max-width: 531px) {
+    font-size: 18px;
+    gap: 20px;
+    height: 70px;
+  }
+  @media screen and (min-width: 532px) and (max-width: 641px) {
+    font-size: 20px;
+    gap: 20px;
+    height: 70px;
+  }
+
+  @media screen and (min-width: 641px) {
+    font-size: 20px;
+    gap: 20px;
+    height: 80px;
+  }
+}
+
+@mixin footerMix {
+  @media screen and (max-width: 321px) {
+    font-size: 8px;
+  }
+  @media screen and (min-width: 322px) and (max-width: 361px) {
+    font-size: 8px;
+  }
+  @media screen and (min-width: 362px) and (max-width: 400px) {
+    font-size: 12px;
+    gap: 10px;
+    height: 55px;
+  }
+  @media screen and (min-width: 401px) and (max-width: 460px) {
+    font-size: 12px;
+    gap: 20px;
+    height: 70px;
+  }
+  @media screen and (min-width: 460px) {
+    font-size: 12px;
+    gap: 40px;
+    height: 80px;
   }
 }
 
@@ -125,15 +199,23 @@ h2 {
 .nav {
   display: flex;
   background: $secondary_salmon;
-  grid-template-columns: auto;
-
   align-items: center;
-  height: 50px;
-  gap: 10px;
-
+  justify-content: center;
+  @include navMix();
   .navItem {
-    justify-items: center;
-    margin-left: 5px;
+    display: flex;
+    &:nth-child(1) {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      width: 40%;
+    }
+    .logo {
+      margin: 0 0 0 4px;
+      padding: 0;
+      width: 100%;
+      max-height: 50px;
+    }
   }
 }
 /**************************************************/
@@ -208,7 +290,14 @@ h2 {
   }
   .specials {
     padding: 0px 20px 0px 20px;
-    display: grid;
+    @media screen and (max-width: 690px) {
+      display: grid;
+    }
+    @media screen and (min-width: 690px) and (max-width: 1670px) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
     .card {
       @include cardStyle($secondary_black, "special");
       justify-self: center;
@@ -264,9 +353,16 @@ h2 {
   }
 
   .comments {
+    margin: 0 0 50px 0;
     padding: 0px 20px 0px 20px;
-    display: grid;
-
+    @media screen and (max-width: 780px) {
+      display: grid;
+    }
+    @media screen and (min-width: 780px) and (max-width: 1670px) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
     .card {
       @include cardStyle($primary_yellow, "testimonial");
       color: $primary_salmon;
@@ -326,25 +422,29 @@ h2 {
 }
 
 .footer {
+  padding: 50px 0 0 0;
+  @include footerMix();
   color: $secondary_black;
   background: $secondary_white;
   display: grid;
+  align-content: end;
   grid-template-areas:
     "links"
     "copyright";
-  grid-template-rows: 1fr 50px;
+  grid-template-columns: auto;
   padding: 20px 0 0 0;
   .links {
     grid-area: links;
+    background: $secondary_white;
     display: grid;
     grid-template-areas: "left right";
-
+    height: 100%;
+    align-content: start;
     .left {
+      background: $secondary_white;
       grid-area: left;
       display: grid;
       /* grid-template-rows: 1fr 1fr; 異質なものを1frでつないだら幅が強制的に同じになる！！ NG!! */
-      grid-auto-rows: min-content; /* 新たな行はコンテンツの最小サイズに設定されます */
-      grid-auto-flow: dense; /* アイテムは可能な限り早く埋められる空間に配置されます */
       .logoContainer {
         padding: 8px 8px 0px 8px;
         .logo {
@@ -352,6 +452,7 @@ h2 {
         }
       }
       .sns {
+        background: $secondary_white;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1em;
@@ -361,6 +462,7 @@ h2 {
         box-sizing: border-box;
 
         .facebook {
+          height: 100%;
         }
         .twitter {
         }
@@ -369,10 +471,13 @@ h2 {
       }
     }
     .right {
+      background: $secondary_white;
       grid-area: right;
       display: grid;
       align-items: stretch;
+      align-content: end;
       .menu {
+        background: $secondary_white;
         list-style: none;
         display: flex;
         flex-wrap: wrap;
@@ -387,9 +492,15 @@ h2 {
     }
   }
   .copyright {
+    display: grid;
+    height: 40px;
+    width: 100%;
+    background: $secondary_white;
+
     grid-area: copyright;
-    justify-self: center;
-    align-self: center;
+    justify-content: center;
+    align-content: center;
+    margin-bottom: 20px;
   }
 }
 
@@ -416,12 +527,12 @@ h2 {
 .reserve {
   background: $primary_green;
   @include sectionArea();
-
+  margin: 0 0 0px 0;
   .header {
     @include sectionHeader();
 
     .title {
-      color: $primary_yellow;      
+      color: $primary_yellow;
     }
   }
   .forms {
@@ -491,18 +602,17 @@ h2 {
     "header"
     "card"
     "button";
+  grid-template-rows: auto 1fr 1fr;
   .header {
     grid-area: header;
     @include sectionHeader();
     padding-top: 20px 0px 20px 0px; /* add another 20px */
     display: grid;
-    grid-template-areas: "title . button";
-    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     .title {
+      display: inline-block;
       grid-area: title;
       color: $primary_yellow;
-      display: grid;
       white-space: nowrap;
       h1,
       h2 {
@@ -543,25 +653,23 @@ h2 {
 
 .confirm-booking {
   background: $primary_green;
-  @include sectionArea();
   display: grid;
+  @include sectionArea();
   grid-template-areas:
     "header"
     "code"
     "card"
     "button";
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   .header {
     grid-area: header;
     @include sectionHeader();
-    padding-top: 20px 0px 20px 0px; /* add another 20px */
+    color: $primary_yellow;
     display: grid;
-    align-items: center;
-    justify-items:center;
-    grid-template-areas: "title";
     .title {
+      display: inline-block;
       grid-area: title;
       color: $primary_yellow;
-      display: grid;
       white-space: nowrap;
       h1,
       h2 {
@@ -573,15 +681,16 @@ h2 {
     }
   }
   .code {
-    grid-area: code;
     display: grid;
+    grid-area: code;
     justify-items: center;
     .qr {
       width: 30%;
+      max-height: 100px;
       justify-self: center;
     }
     .rid {
-      color:$secondary_white;
+      color: $secondary_white;
       margin: 0 0 20px 0;
     }
   }
@@ -592,30 +701,34 @@ h2 {
     padding: 20px;
     color: $secondary_white;
     display: grid;
-    grid-template-areas: "row"
-                         "row"
-                         "row"
-                         "button";
     .row {
       display: grid;
       grid-template-areas: "header data";
       grid-template-columns: 10em 1fr;
       .header {
         grid-area: header;
-        justify-self: start;
       }
       .value {
         grid-area: data;
         justify-self: flex-end;
-        white-space:nowrap;
       }
     }
   }
   .button {
-    margin:20px 0 0 0;
     grid-area: button;
     display: flex;
-    gap: 20px;
     justify-content: center;
+  }
+}
+
+.login {
+  height: 500px;
+  display: grid;
+  .header {
+    justify-self: start;
+  }
+  .main {
+    justify-self: center;
+    align-self: start;
   }
 }

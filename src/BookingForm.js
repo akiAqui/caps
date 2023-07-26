@@ -54,7 +54,6 @@ const BookingForm = (props) => {
     const guestHandler = (e) => {
         setReservation({ ...reservation, guest: e.target.value });
     }
-
     const occasionHandler = (e) => {
         setReservation({ ...reservation, occasion: e.target.value });
     }
@@ -76,7 +75,6 @@ const BookingForm = (props) => {
             return true;
         }
         return false;
-
     };
     const navigate = useNavigate();
 
@@ -96,7 +94,6 @@ const BookingForm = (props) => {
         console.log('props=', props);
     }, [])
 
-
     return (
         <div className="forms">
             <form onSubmit={submitHandler} className="submit">
@@ -113,7 +110,6 @@ const BookingForm = (props) => {
                         className="value"
                         aria-required="true"
                         aria-labelledby="lb_date" />
-
                 </div>
 
                 {/* TIME */}
@@ -133,7 +129,6 @@ const BookingForm = (props) => {
                         )
                         )}
                     </select>
-
                 </div>
 
                 {/* setting the number of guests*/}
@@ -160,8 +155,8 @@ const BookingForm = (props) => {
                         <option>Birthday</option>
                         <option>Anniversary</option>
                     </select>
-
                 </div>
+                
                 <button type="submit" className="button ll_button" onClick={submitHandler}>
                     Make Your reservation
                 </button>

@@ -21,7 +21,6 @@ to.setDate(from.getDate() + 7);
 const min = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(from);
 const max = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(to);
 
-
 const initArg = min;
 const initializeTimes = (arg) => {
   return { date: arg, times: [] }
@@ -43,14 +42,12 @@ export const updateTimes = (state, action) => {
 }
 
 function App() {
-
   const fetchAPI = async (date) => {
     return ["18:00", "20:00", "21:00", "22:00"]
   }
   const submitAPI = async (reservation) => {
     return true;
   }
-
   const [availableTimes, dispatch] = useReducer(updateTimes, initArg, initializeTimes);
   const [reservation, setReservation] = useState(
     {
@@ -90,10 +87,10 @@ function App() {
       <ReservationContext.Provider value={{ reservation, setReservation }}>
         <Router>
           <nav className="nav" role="navigation">
-            <Link to="/" className="navItem"><img alt='logo' src={logo} className="navItem" /></Link>
-            <Link to="/menu" className="navItem">Menu</Link>
-            <Link to="/about" className="navItem">About</Link>
+            <Link to="/" className="navItem" ><img alt='logo' src={logo} className="logo"/></Link>
+{/*             <Link to="/menu" className="navItem">Menu</Link> */}
             <Link to="/reserve" className="navItem">Reserve</Link>
+            <Link to="/about" className="navItem">About</Link>
             <Link to="/login" className="navItem"> Login</Link>
           </nav>
           <Routes>
@@ -101,7 +98,7 @@ function App() {
             <Route path="/menu" element={<MenuPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/reserve" element={<BookingPage dispatch={dispatch} />} />
-            <Route path="/confirm" element={<BookingConf />} />
+            <Route path="/confirm" element={<BookingConf/>} />
             <Route path="/done" element={<ConfirmBooking/>} />
             <Route path="/login" element={<Login />} />
           </Routes>
