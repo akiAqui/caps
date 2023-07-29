@@ -35,7 +35,7 @@ export const updateTimes = (state, action) => {
       console.log('Set_Date');
       return { ...state, times: action.times }
     case 'Confirmed':
-      return {date:'',times:[]}
+      return { date: '', times: [] }
     default:
       return state;
   }
@@ -49,7 +49,7 @@ function App() {
     return true;
   }
   const [availableTimes, dispatch] = useReducer(updateTimes, initArg, initializeTimes);
-  const [reservation, setReservation] = useState(
+  const [bookingData, setBookingData] = useState(
     {
       date: min,
       time: '',
@@ -62,33 +62,45 @@ function App() {
     }
   )
 
+  // set date
   useEffect(() => {
-    console.log('date effect');
+    //console.log('date effect');
     fetchAPI(availableTimes.date).then(times => {
       dispatch({ type: 'Set_Times', times: times })
     })
   }, [availableTimes.date])
 
+  // set times
   useEffect(() => {
-    console.log('time effect');
-    setReservation({...reservation,times:availableTimes.times})
-  },[availableTimes.times])
+    //console.log('time effect');
+    setBookingData({ ...bookingData, times: availableTimes.times })
+  }, [availableTimes.times])
 
+  //save bookingData
   useEffect(() => {
-    console.log('confirm effect');
-    submitAPI(reservation).then(bool => {
+    //console.log('confirm effect');
+    const data = {
+      date: bookingData.date,
+      time: bookingData.time,
+      guest: bookingData.guest,
+      occation: bookingData.occasion
+    };
+    const sdata = JSON.stringify(data);
+
+    localStorage.setItem('littleLemon', sdata);
+    submitAPI(bookingData).then(bool => {
       dispatch({ type: 'Confirmed' })
     })
-  },[reservation.isConfirmed])
+  }, [bookingData.isConfirmed])
 
 
   return (
     <>
-      <ReservationContext.Provider value={{ reservation, setReservation }}>
+      <ReservationContext.Provider value={{ reservation: bookingData, setReservation: setBookingData }}>
         <Router>
           <nav className="nav" role="navigation">
-            <Link to="/" className="navItem" ><img alt='logo' src={logo} className="logo"/></Link>
-{/*             <Link to="/menu" className="navItem">Menu</Link> */}
+            <Link to="/" className="navItem" ><img alt='logo' src={logo} className="logo" /></Link>
+            {/*             <Link to="/menu" className="navItem">Menu</Link> */}
             <Link to="/reserve" className="navItem">Reserve</Link>
             <Link to="/about" className="navItem">About</Link>
             <Link to="/login" className="navItem"> Login</Link>
@@ -98,8 +110,8 @@ function App() {
             <Route path="/menu" element={<MenuPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/reserve" element={<BookingPage dispatch={dispatch} />} />
-            <Route path="/confirm" element={<BookingConf/>} />
-            <Route path="/done" element={<ConfirmBooking/>} />
+            <Route path="/confirm" element={<BookingConf />} />
+            <Route path="/done" element={<ConfirmBooking />} />
             <Route path="/login" element={<Login />} />
           </Routes>
         </Router>

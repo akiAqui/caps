@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, act, waitFor, getByLabelText, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useNavigate } from 'react-router-dom';
 import BookingForm from './BookingForm.js';
 import ReservationContext from './ReservationContext.js';
 
@@ -10,20 +9,20 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => jest.fn(),
 }));
 
-
-const mockAvailableSlots = {
-    '2023-07-19': ['18:00', '20:00', '21:00', '22:00']
+const mockAvailableTimes = {
+    date: '2023-07-21',
+    times: ['18:00', '20:00', '21:00', '22:00']
 };
 
 const mockReservation = {
-    date: '2023-07-19',
+    date: '2023-07-21',
     time: '',
     guest: '',
-    from: '2023-07-19',
-    to: '2023-07-26',
-    data: { '2023-07-19': ['18:00', '20:00', '21:00', '22:00'] }
+    from: '2023-07-21',
+    to: '2023-07-28',
+    times: ['18:00', '20:00', '21:00', '22:00'],
+    isConfirmed: false,
 };
-
 const setMockReservation = jest.fn();
 
 describe('BookingForm', () => {
@@ -41,15 +40,17 @@ describe('BookingForm', () => {
         const dateInput = screen.getByLabelText(/Date:/);
 
         // calendar
-        const formattedDate = '2023-07-19';
+        const formattedDate = '2023-07-21';
         fireEvent.change(dateInput, { target: { value: formattedDate } });
         expect(screen.getByDisplayValue(formattedDate)).toBeInTheDocument();
         expect(dateInput.value).toBe(formattedDate);
+ 
     });
 
 
 
-    it('can selects time 18:00 -2 ', async () => {        const user = userEvent.setup() // まずsetup
+    it('can selects time 18:00 -2 ', async () => {
+        const user = userEvent.setup() // まずsetup
         render(
             <ReservationContext.Provider
                 value={{ reservation: mockReservation, setReservation: setMockReservation }}>
@@ -57,11 +58,13 @@ describe('BookingForm', () => {
             </ReservationContext.Provider>
         );
 
-        const formattedDate = '2023-07-19';
+        const formattedDate = '2023-07-21';
         const dateInput = screen.getByLabelText(/Date:/);
         fireEvent.change(dateInput, { target: { value: formattedDate } });
         expect(screen.getByDisplayValue(formattedDate)).toBeInTheDocument();
-
+        expect(dateInput.value).toBe(formattedDate);
+        screen.debug();
+        
         // すべての combobox 要素を取得
         const allComboboxes = screen.getAllByRole('combobox');
         const timeCombobox = allComboboxes.find((combobox) => combobox.getAttribute('aria-labelledby') === 'lb_time');
@@ -84,7 +87,7 @@ describe('BookingForm', () => {
 
 
     it('can receives text value in guests - 3', async () => {
-        const user = userEvent.setup() // まずsetup
+        const user = userEvent.setup(); // まずsetup
         render(
             <ReservationContext.Provider value={{ reservation: mockReservation, setReservation: setMockReservation }}>
                 <BookingForm dispatch={jest.fn()} />
@@ -98,7 +101,7 @@ describe('BookingForm', () => {
 
 
     it('receives text value in guests - 4', async () => {
-        const user = userEvent.setup() // まずsetup
+        const user = userEvent.setup(); // まずsetup
         render(
             <ReservationContext.Provider value={{ reservation: mockReservation, setReservation: setMockReservation }}>
                 <BookingForm dispatch={jest.fn()} />
@@ -120,7 +123,7 @@ describe('BookingForm', () => {
 
 
     it('receives text value in guests - 5', async () => {
-        const user = userEvent.setup() // まずsetup
+        const user = userEvent.setup(); // まずsetup
         render(
             <ReservationContext.Provider value={{ reservation: mockReservation, setReservation: setMockReservation }}>
                 <BookingForm dispatch={jest.fn()} />
@@ -139,7 +142,7 @@ describe('BookingForm', () => {
     });
 
     it('receives text value in guests - 6', async () => {
-        const user = userEvent.setup() // まずsetup
+        const user = userEvent.setup(); // まずsetup
         render(
             <ReservationContext.Provider value={{ reservation: mockReservation, setReservation: setMockReservation }}>
                 <BookingForm dispatch={jest.fn()} />
@@ -157,7 +160,7 @@ describe('BookingForm', () => {
     });
 
     it('sets occasion - 7', async () => {
-        const user = userEvent.setup() // まずsetup
+        const user = userEvent.setup(); // まずsetup
         render(
             <ReservationContext.Provider value={{ reservation: mockReservation, setReservation: setMockReservation }}>
                 <BookingForm dispatch={jest.fn()} />
@@ -170,7 +173,7 @@ describe('BookingForm', () => {
     });
 
     it('sets occasion - 7', async () => {
-        const user = userEvent.setup() // まずsetup
+        const user = userEvent.setup(); // まずsetup
         render(
             <ReservationContext.Provider value={{ reservation: mockReservation, setReservation: setMockReservation }}>
                 <BookingForm dispatch={jest.fn()} />
@@ -185,7 +188,7 @@ describe('BookingForm', () => {
 
 describe('BookingForm scenario tests - 8', () => {
     it('input all the value', async () => {
-        const user = userEvent.setup() // まずsetup
+        const user = userEvent.setup(); // まずsetup
         render(
             <ReservationContext.Provider value={{ reservation: mockReservation, setReservation: setMockReservation }}>
                 <BookingForm dispatch={jest.fn()} />

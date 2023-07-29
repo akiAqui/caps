@@ -90,8 +90,8 @@ const BookingForm = (props) => {
     };
 
     useEffect(() => {
-        console.log('reservation=', reservation);
-        console.log('props=', props);
+        //console.log('reservation=', reservation);
+        //console.log('props=', props);
     }, [])
 
     return (
